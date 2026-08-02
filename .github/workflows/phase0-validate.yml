@@ -28,12 +28,26 @@ jobs:
 
       - name: Fetch current-season box scores from hoopR-nba-data (GitHub raw)
         run: |
+          set -euo pipefail
           mkdir -p fixtures
-          curl -sL -o fixtures/player_box_2026.parquet \
+          # -f: fail loudly on a non-2xx response instead of silently writing
+          # an HTML error page to the file, which the next step would then
+          # try to parse as parquet and fail on with a useless error.
+          curl -fsSL -o fixtures/player_box_2026.parquet \
             "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-data/main/nba/player_box/parquet/player_box_2026.parquet"
-          curl -sL -o fixtures/team_box_2026.parquet \
+          curl -fsSL -o fixtures/team_box_2026.parquet \
             "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-data/main/nba/team_box/parquet/team_box_2026.parquet"
           ls -la fixtures/
+          # Sanity check: real parquet files here are hundreds of KB; a
+          # truncated or error-page download would be tiny. Fail fast and
+          # visibly rather than let it surface as an opaque pandas error.
+          for f in fixtures/player_box_2026.parquet fixtures/team_box_2026.parquet; do
+            size=$(stat -c%s "$f")
+            if [ "$size" -lt 10000 ]; then
+              echo "::error::$f is only $size bytes — looks like a failed download, not real parquet data"
+              exit 1
+            fi
+          done
 
       - name: Derive ratings and print validation summary
         run: python ingest/phase0_validate.py
