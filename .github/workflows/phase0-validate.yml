@@ -1,0 +1,39 @@
+name: Phase 0 — validate free data path
+
+# Proves the whole Phase 0 chain runs unattended, on a schedule, entirely on
+# GitHub-hosted infrastructure: fetch hoopR-nba-data box scores from GitHub
+# raw (no stats.nba.com call, so the datacenter-IP block never applies —
+# see DATA.md §1-2), derive team/player ratings, print a sanity summary.
+#
+# This is the Phase 0 validation script (ingest/phase0_validate.py), not the
+# real Phase 1 ingest pipeline (no DB write yet — that's Phase 1 scope).
+
+on:
+  schedule:
+    - cron: "0 11 * * *"  # ~6am ET / 11am UTC, matching DATA.md §3's target nightly window
+  workflow_dispatch: {}    # manual trigger, for proving it works without waiting for the schedule
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch current-season box scores from hoopR-nba-data (GitHub raw)
+        run: |
+          mkdir -p fixtures
+          curl -sL -o fixtures/player_box_2026.parquet \
+            "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-data/main/nba/player_box/parquet/player_box_2026.parquet"
+          curl -sL -o fixtures/team_box_2026.parquet \
+            "https://raw.githubusercontent.com/sportsdataverse/hoopR-nba-data/main/nba/team_box/parquet/team_box_2026.parquet"
+          ls -la fixtures/
+
+      - name: Derive ratings and print validation summary
+        run: python ingest/phase0_validate.py
