@@ -10,7 +10,17 @@ This is a throwaway validation script, not the Phase 1 ingest package.
 Formulas here get moved into ingest/ modules once Phase 0 passes.
 """
 
+import sys
+
 import pandas as pd
+
+# GitHub Actions' Ubuntu runners don't reliably give Python a UTF-8 stdout
+# by default (locale-dependent) — without this, printing an em-dash or a
+# player name with a diacritic (Jokić, Dončić, Şengün — all appear in the
+# derived output below) raises UnicodeEncodeError and crashes the run.
+# Confirmed as the actual failure cause in CI (run #2) after ruling out a
+# bad download — see MEMORY.md.
+sys.stdout.reconfigure(encoding="utf-8")
 
 SEASON = 2026
 REGULAR_SEASON = 2  # season_type == 2
@@ -273,7 +283,7 @@ def main():
     league_off = (teams["pts"].sum() / teams["poss"].sum()) * 100
     league_def = (teams["opp_pts"].sum() / teams["opp_poss"].sum()) * 100
     print(f"\nLeague-wide ORtg: {league_off:.2f}   League-wide DRtg: {league_def:.2f}")
-    print("(sanity check — these should be ~equal, since one team's points scored is another's points allowed)")
+    print("(sanity check - these should be ~equal, since one team's points scored is another's points allowed)")
 
     players = player_ratings(pb, tb, teams)
     # Minimum-sample floor purely to make the printed table readable —
