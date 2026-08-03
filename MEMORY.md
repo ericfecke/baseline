@@ -109,6 +109,16 @@ _Append here as they're found. Seed list from DATA.md §6 — confirm or refute 
 
 ---
 
+## CI environment gotchas (Phase 0 GitHub Actions debugging, 2026-08-02)
+
+Getting `.github/workflows/phase0-validate.yml` to actually pass took 4 runs and 3 distinct real bugs, none of which showed up locally (Windows, Python 3.8). Worth internalizing before Phase 1 builds the real ingest workflow on the same runner image:
+
+1. **`curl` without `-f` doesn't fail on HTTP errors.** `curl -sL -o file url` exits 0 even on a 404/error response — it just writes the error body to the file. Always use `curl -fsSL` for anything downstream expects to be real data, and per DATA.md's "validate every response at the boundary" rule, added a minimum-file-size sanity check after the fetch step too. This wasn't actually the cause of the failures below, but it was a real, silent gap — fixed regardless.
+2. **GitHub's Ubuntu runners don't reliably give Python a UTF-8 stdout.** A plain `print()` with an em-dash raised `UnicodeEncodeError` and crashed the script. Reproduced locally by forcing `PYTHONIOENCODING=ascii`. Fix: `sys.stdout.reconfigure(encoding="utf-8")` at the top of any script that will run in CI and prints non-ASCII text (player names with diacritics are a realistic future trigger, even though hoopR's `athlete_display_name` field turned out to already be ASCII-normalized — "Jokic" not "Jokić").
+3. **The actual root cause: numpy/pandas ABI mismatch.** `requirements.txt` pinned `pandas==2.0.3` but left `numpy` unpinned. Locally, pip resolved `numpy==1.24.4` (last numpy release with Python 3.8 wheels — compatible with pandas 2.0.3, built against numpy 1.x ABI). On the CI runner (Python 3.11.15), pip resolved numpy 2.x (wheels available for 3.11), which broke ABI compatibility with the pandas 2.0.3 wheel: `ValueError: numpy.dtype size changed... Expected 96 from C header, got 88 from PyObject`. **Lesson: pin numpy explicitly whenever pandas is pinned** — don't rely on pip's resolver picking a compatible pair, since the "compatible" version differs by Python version and wheel availability, and local dev on an older Python can mask a break that only shows up on CI's newer Python.
+
+**Debugging note on process:** the first two fixes were real, verified bugs (confirmed by local repro before pushing), but neither was *the* blocker — the numpy ABI issue was underneath both, and guessing blind burned two CI runs. Getting the actual traceback from the Actions UI (anonymous API access can list runs/jobs but can't fetch job logs — 403) immediately identified the real cause. **For future CI debugging: ask for the actual log text after one blind attempt, don't keep guessing.**
+
 ## Cross-project notes
 
 - Sibling reference project: `github.com/ericfecke/xml-auditor` — CLAUDE.md/MEMORY.md split and agent-per-stage pipeline pattern reused here. Not otherwise related (job-feed auditing vs. NBA stats).
