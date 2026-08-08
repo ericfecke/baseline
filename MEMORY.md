@@ -32,9 +32,30 @@ The originally-specified simplified formula (`FGA + 0.44·FTA − OREB + TOV`) w
 - **Current season present:** `player_box_2026.parquet` and `team_box_2026.parquet` both exist and are current through the last Summer League games in the file. Confirms the mirror repo carries current-season data as DATA.md hoped.
 - Repo pushed at 2026-08-02 (today) — actively maintained.
 
-### Field name quirks
+### Field name quirks and dtypes (confirmed 2026-08-07, Phase 1)
 
-_Provider field names that don't match our schema — fill in once the parquet schema is inspected against `player_stats`/`team_stats` columns._
+- **`athlete_id` is `float64`, not an integer type**, because the column contains nulls (33 rows in 2025-26 regular season). Coerce to `int` after dropping nulls — provider IDs are the only join key we use (DATA.md §6), so a float ID is a bug waiting to happen. The 33 null-`athlete_id` rows carry a name too, so they're not team-total rows; they're just unattributable and get dropped with a counted reason.
+- **Missing numerics are `NaN`, not `None`.** Matters more than it sounds: `NaN` *is* a float, so it satisfies a `Optional[float]` annotation and then fails every `ge=0` bound, producing a wall of confusing validation errors for what is really "this player didn't play." Convert `NaN → None` at the boundary (done in `_StrictRow._nan_to_none`).
+- **A DNP player has nulls across the entire box line** (~5,541 rows), not zeros. `did_not_play=True` always implies null minutes; the converse isn't quite true (35 rows have `did_not_play=False` with null minutes).
+- **`team_color` / `team_alternate_color` are hex strings without the `#`** (e.g. `'1d428a'`), and are null on 73 rows. Needed for PRD §3's team-color dot encoding — prepend `#` and have a fallback.
+
+### `gp` (games played) — use `minutes is not None`, never `active`
+
+This resolves the Gobert discrepancy flagged in Phase 0. Rudy Gobert has **79** rows in the 2025-26 regular season but only **76** with a box line, and Basketball-Reference reports **G=76**. So games-played counts rows where `minutes` is not null.
+
+**Do not use the `active` column for this.** It tracks roster status, not participation — Gobert shows `active=True` on only **14** of his 76 played games. Across the dataset `active` splits 12,291 True / 14,354 False among rows that *did* have minutes, so it's uncorrelated with playing. Easy trap, badly wrong answer.
+
+### The three turnover columns, and a real upstream data error
+
+`turnovers` = player-attributable, `team_turnovers` = charged to the team (shot clock, backcourt), `total_turnovers` = both. **The possessions formula needs `total_turnovers`** (a team turnover ends a possession too).
+
+Two things learned digging into this:
+
+1. **`team_turnovers` is a derived residual**, not an observed stat — it equals `total_turnovers − Σ(player turnovers)`, which holds in 2,458/2,462 rows. Consequence: **it can be negative** (range observed: −16 to +5). Don't bound it at ≥ 0 in validation, or 4 bad upstream rows kill an entire nightly run.
+2. **`total_turnovers` is sometimes under-reported — a genuine upstream error affecting our ratings.** In 4 rows it came in *below* the player-attributable `turnovers`, which is impossible. Worst case is game **401810469** (Clippers/Bulls), which reports `total_turnovers = 0` for *both* teams while their players individually recorded 16 and 12. Left alone, that game's possession estimate is short by ~16/~12, inflating both teams' ORtg for it.
+   **Handling:** `TeamBoxRow.possession_turnovers` returns `max(total_turnovers, turnovers)` — repairs the floor without inventing data, since we never claim more turnovers than one of the two sources reports. `turnovers_repaired` exposes when it fired so QA can flag it rather than repairing silently. Affects 4/2462 rows (0.16%), so season-level impact is small but real.
+
+**Validator design rule that came out of this:** quirks we've characterised get filtered/repaired *and counted*; anything uncharacterised fails the run loudly. The turnover *identity* (`total == turnovers + team_turnovers`) is enforced strictly, because if that ever breaks the provider changed a column's meaning and the possessions formula needs re-deriving.
 
 ### nba_api (fallback path, if 0a fails)
 
