@@ -119,6 +119,8 @@ Getting `.github/workflows/phase0-validate.yml` to actually pass took 4 runs and
 
 **Debugging note on process:** the first two fixes were real, verified bugs (confirmed by local repro before pushing), but neither was *the* blocker — the numpy ABI issue was underneath both, and guessing blind burned two CI runs. Getting the actual traceback from the Actions UI (anonymous API access can list runs/jobs but can't fetch job logs — 403) immediately identified the real cause. **For future CI debugging: ask for the actual log text after one blind attempt, don't keep guessing.**
 
+**Resolved 2026-08-07 — local toolchain now matches CI.** Installed Python 3.11.9 via `winget install Python.Python.3.11` and rebuilt `.venv` against it; the pinned deps (numpy 1.24.4 / pandas 2.0.3 / pyarrow 17.0.0) all resolve cleanly on 3.11, independently confirming the pin fix. Re-ran `ingest/phase0_validate.py` and diffed both derived CSVs against the Python 3.8 output: **byte-identical**, so the interpreter change moved no numbers. Two notes for future installs: python.org only ships Windows binary installers for 3.11 up to **3.11.9** (3.11.10+ are security-only, source-tarball-only), so 3.11.9 is the newest installable 3.11 — patch-level gap vs. CI's 3.11.15 is irrelevant (same `cp311` ABI and wheel tags). And **do not jump to 3.12+** while numpy is pinned at 1.24.4 — that version has no 3.12 wheels (numpy added 3.12 support in 1.26), so it would recreate this exact bug class.
+
 ## Cross-project notes
 
 - Sibling reference project: `github.com/ericfecke/xml-auditor` — CLAUDE.md/MEMORY.md split and agent-per-stage pipeline pattern reused here. Not otherwise related (job-feed auditing vs. NBA stats).
