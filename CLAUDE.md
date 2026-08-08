@@ -9,7 +9,7 @@ Full specs live in Obsidian, not here:
 
 Read `PRD.md`, `DATA.md`, `MODEL.md`, `STACK.md`, `ROADMAP.md` there before touching the corresponding area of the app. This file is the condensed, code-facing summary — when the two disagree, the Obsidian folder wins and this file needs updating in the same commit.
 
-**Status:** Phase 0 (data-source validation). No app code yet.
+**Status:** Phase 0 complete (free data path validated, ratings reconciled against Basketball-Reference, nightly GitHub Actions run proven green). Phase 1 in progress — the Python `ingest/` package. No web app code yet; the Next.js scaffold moved to Phase 3.
 
 ---
 
@@ -33,8 +33,7 @@ Read `PRD.md`, `DATA.md`, `MODEL.md`, `STACK.md`, `ROADMAP.md` there before touc
 | Charts | visx for the hero scatter; Recharts for secondary charts |
 | Motion | Framer Motion + d3 interpolators for scale transitions |
 | Data fetching | TanStack Query |
-| Database | Postgres — Supabase free tier (build-time store, not runtime dependency) |
-| ORM | Drizzle |
+| Store | Dated JSON snapshots committed to the repo — `data/snapshots/{season}/{as_of_date}.json`, `data/latest.json`, `data/ingest_runs.jsonl` (`DATA.md` §7). Build-time only, never a runtime dependency. Postgres/Supabase + Drizzle is the documented upgrade path, not the current plan |
 | Ingest language | Python — owns `numpy`/`pandas`/`scipy`/`statsmodels` for the stats layer |
 | Scheduling | GitHub Actions nightly (preferred — reads the `hoopR-nba-data` mirror, no IP block); Windows Task Scheduler only if Phase 0 falls back to local `nba_api` |
 | State | URL query params as the only filter store — no Redux/Zustand |
@@ -59,28 +58,25 @@ fetch → validate → normalize → resolve transactions → aggregate → MODE
 - **aggregate** — possessions via the precise two-sided estimate (averages both teams' per-game estimates, ORB%-weighted; see `MODEL.md` §8a — the simpler `FGA + 0.44·FTA − OREB + TOV` formula was tried in Phase 0 and rejected, it reconciles against Basketball-Reference with a multi-point systematic offset); team ORtg/DRtg trivially from that; player ORtg/DRtg via Dean Oliver's formulas, validated against Basketball Reference until agreement is within rounding — achieved in Phase 0, see `MEMORY.md`.
 - **MODEL** — empirical-Bayes shrinkage (`adjusted = w·observed + (1−w)·prior`, `w = n/(n+k)`), confidence intervals, robust (median/MAD, Mahalanobis) outlier flagging. Full design: `MODEL.md`.
 - **QA** — integrity checks (impossible values, day-over-day jumps, team/player reconciliation) → 0–1 confidence score + flags in `ingest_runs`. Below threshold, reject the run and keep serving the last good snapshot.
-- **publish** — write JSON snapshot → trigger static rebuild → redeploy. Nothing in the browser talks to Postgres directly.
+- **publish** — write the dated JSON snapshot + `latest.json` → append to `ingest_runs.jsonl` → trigger static rebuild → redeploy. **The snapshot payload must be deterministic** — a pure function of (input data, `as_of_date`), with no wall-clock timestamps or unstable ordering, so "running twice changes nothing" is byte-verifiable (`DATA.md` §5). Wall-clock time goes in the run log only.
 
 Agent-per-stage, one module per stage, mirroring xml-auditor's `intake → reader → breakdown → qa → orchestrator` shape (github.com/ericfecke/xml-auditor). Thin routes, logic in modules — `app.py`/route handlers hold no business logic, same discipline as xml-auditor's `app.py`.
 
 ---
 
-## Storage shape (starting point — see DATA.md §7 for the authoritative version)
+## Storage shape (see DATA.md §7 for the authoritative version)
 
 ```
-teams(id, provider_id, name, abbr, conference, division, primary_color, secondary_color)
-players(id, provider_id, name, team_id, position, jersey)
-player_team_stints(id, player_id, team_id, season, start_date, end_date,
-                    acquisition_type, boundary_source, gp, poss)
-player_stats(id, player_id, season, as_of_date, stint_id, gp, min_total, min_per_game,
-             off_rtg, def_rtg, net_rtg, pace, poss, usage, ts_pct, raw_payload,
-             off_rtg_adj, def_rtg_adj, off_rtg_ci_lo, off_rtg_ci_hi, def_rtg_ci_lo, def_rtg_ci_hi,
-             reliability, def_rtg_vs_team, outlier_score, sample_flag)
-team_stats(id, team_id, season, as_of_date, gp, off_rtg, def_rtg, net_rtg, pace, raw_payload)
-ingest_runs(id, started_at, finished_at, provider, status, rows_written, error)
+data/snapshots/{season}/{as_of_date}.json   -- immutable, one per ingest date
+data/latest.json                            -- newest good snapshot; the web app reads this
+data/ingest_runs.jsonl                      -- append-only run log (timestamps live HERE, not in snapshots)
 ```
 
-Idempotent upsert on `(season, entity_id, as_of_date)`. Snapshot daily, don't overwrite — free historical trend charts later.
+Snapshot payload carries three collections — `teams`, `players`, `stints` — plus a `meta` block with `season`, `as_of_date`, `provider`, QA confidence/flags, and row counts. Player rows are per **current stint** (`stint_id` links to `stints` for `acquisition_type`), which is what makes `poss` the correct `n` for Phase 2's shrinkage weight.
+
+Phase 2 adds the derived columns to player rows: `off_rtg_adj`, `def_rtg_adj`, CI bounds, `reliability`, `def_rtg_vs_team`, `outlier_score`, `sample_flag` (`MODEL.md` §7).
+
+Keyed on `(season, provider_id, as_of_date)`. Snapshot daily, never overwrite a past date — free historical trend charts later.
 
 ---
 
