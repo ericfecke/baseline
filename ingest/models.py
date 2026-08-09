@@ -44,6 +44,20 @@ SEASON_TYPE_PLAY_IN = 5
 # MEMORY.md — this bit us in Phase 0.
 REAL_TEAM_IDS = frozenset(range(1, 31))
 
+# ESPN game `type_id` values that appear under season_type == 2 but do NOT
+# count toward regular-season statistics:
+#
+#   4  ALLSTAR -- All-Star Weekend exhibitions
+#   39 CC      -- NBA Cup (In-Season Tournament) Championship game
+#
+# The Cup Championship is the subtle one, and it matches the NBA's own rule:
+# every other Cup game — group play, quarterfinals, semifinals — counts as a
+# regular-season game and is typed STD, but the final does not. ESPN still
+# ships it as season_type 2, which is why Basketball-Reference shows San
+# Antonio and New York at 82 games while the raw feed has them at 83.
+# See MEMORY.md.
+NON_COUNTING_GAME_TYPE_IDS = frozenset({4, 39})
+
 
 class _StrictRow(BaseModel):
     """Providers hand us dozens of columns; we ignore the ones we don't use,

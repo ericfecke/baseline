@@ -57,6 +57,28 @@ Two things learned digging into this:
 
 **Validator design rule that came out of this:** quirks we've characterised get filtered/repaired *and counted*; anything uncharacterised fails the run loudly. The turnover *identity* (`total == turnovers + team_turnovers`) is enforced strictly, because if that ever breaks the provider changed a column's meaning and the possessions formula needs re-deriving.
 
+### The NBA Cup Championship must be excluded (found 2026-08-07)
+
+ESPN/hoopR tags the **NBA Cup (In-Season Tournament) Championship game** as `season_type == 2`, but it does **not** count toward regular-season statistics — officially, or in Basketball-Reference. Left in, the two finalists show **83** games instead of 82, and `gp` and `pace` are wrong by a game for every player on both rosters.
+
+Found by chasing a +1 `gp` discrepancy on Luke Kornet (ours 69, BRef 68) and Victor Wembanyama (65 vs 64) — both San Antonio, which was one of the two teams showing 83 games. 2025-26's game is `401809839`, 2025-12-16, NYK 124 – SAS 113 at T-Mobile Arena.
+
+**Detect it from schedule metadata, never from the date or game counts.** `nba/schedules/parquet/nba_schedule_{season}.parquet` carries per-game type fields. Within `season_type == 2` the taxonomy is exactly:
+
+| `type_id` | `type_abbreviation` | Count (2025-26) | Counts toward regular season? |
+|---|---|---|---|
+| 1 | `STD` | 1,234 | **Yes** |
+| 4 | `ALLSTAR` | 4 | No |
+| 39 | `CC` | 1 | **No** — the Cup final |
+
+So the rule is `type_id in {4, 39}`. A date-based or "which team has 83 games" heuristic would also be wrong mid-season, when no team has hit 83 yet but the game is already in the data.
+
+**Do not over-correct.** Every *other* NBA Cup game counts and is typed `STD` — group play (60 games), quarterfinals (4), semifinals (2). Only the final is excluded. `notes_headline` distinguishes them (`'NBA Cup - Group Play'`, `'NBA Cup Championship'`, etc.) but `type_id` is the reliable key. There's a test guarding against dropping the group-play games.
+
+After this fix, all 30 teams show 82 games and all 10 spot-checked players match BRef exactly on `gp`, with ratings within 1.0.
+
+**Related trap:** `neutral_site == True` is *not* a usable proxy — 6 season_type-2 games are at neutral sites (London, Berlin, Mexico City, plus the Cup semis and final), and the international games absolutely do count.
+
 ### nba_api (fallback path, if 0a fails)
 
 _Not yet attempted — only pursue if hoopR-nba-data proves unusable._

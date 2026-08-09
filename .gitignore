@@ -1,8 +1,19 @@
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Provider parquet files are a local/CI cache, re-downloadable from the
+# hoopR mirror at any time. Committing them would add ~750KB per season of
+# binary churn for data we don't own.
 fixtures/*.parquet
+fixtures/*.parquet.partial
 fixtures/*.csv
+
+# data/ is deliberately NOT ignored — the dated JSON snapshots ARE the
+# store (DATA.md §7), and their git history is the snapshot history that
+# makes trend charts free later. ~63KB gzipped per day.
+
 node_modules/
 .env
 .env.local
