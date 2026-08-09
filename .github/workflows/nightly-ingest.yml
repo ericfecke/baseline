@@ -1,0 +1,86 @@
+name: Nightly ingest
+
+# Runs the real ingest pipeline and commits the dated snapshot.
+#
+# Works entirely on GitHub-hosted infrastructure because we read box scores
+# from the hoopR mirror on GitHub raw, never from stats.nba.com — so the
+# datacenter-IP block that rules out cloud-hosted nba_api never applies
+# (DATA.md §2a). Nothing depends on a machine at home staying awake.
+#
+# There is no database and no secret: the store is dated JSON committed
+# back to this repo (DATA.md §7).
+
+on:
+  schedule:
+    # ~6am ET. Late enough that the previous night's games are final and
+    # the upstream mirror has published them.
+    - cron: "0 11 * * *"
+  workflow_dispatch: {}
+
+# Least privilege: the job needs to push the snapshot commit and nothing
+# else.
+permissions:
+  contents: write
+
+concurrency:
+  # A slow run must never overlap the next night's and race on the commit.
+  group: nightly-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          # Pinned to match local dev exactly. A local/CI Python mismatch
+          # is what produced the numpy ABI failure in Phase 0 — see
+          # MEMORY.md. Do not float this to 3.12+ while numpy is pinned at
+          # 1.24.4, which has no 3.12 wheels.
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run test suite
+        # Gate the write on the tests. A pipeline that can't pass its own
+        # reconciliation checks should not be publishing numbers, and
+        # catching that here is cheaper than catching it in a snapshot.
+        run: python -m pytest tests/ -q
+
+      - name: Ingest
+        # Failure exits non-zero, writes nothing, and leaves the previous
+        # snapshot serving. QA below threshold behaves the same way — "fail
+        # loudly to the maintainer, quietly to users" (DATA.md §5).
+        run: python -m ingest --season 2026 --provider hoopr
+
+      - name: Summarise the run
+        if: always()
+        run: |
+          if [ -f data/ingest_runs.jsonl ]; then
+            {
+              echo '### Latest ingest run'
+              echo '```json'
+              tail -n 1 data/ingest_runs.jsonl | python -m json.tool
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Commit the snapshot
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain data)" ]; then
+            echo "No snapshot changes to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git commit -m "Nightly snapshot: $(date -u +%Y-%m-%d)"
+          # Rebase rather than merge: the snapshot commit has no reason to
+          # create a merge bubble if a human pushed while this ran.
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

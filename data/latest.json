@@ -62,7 +62,7 @@
         "stage": "aggregate"
       }
     ],
-    "provider": "hoopr",
+    "provider": "fixture",
     "qa": {
       "confidence": 0.7,
       "flags": [
