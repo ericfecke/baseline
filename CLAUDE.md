@@ -9,7 +9,9 @@ Full specs live in Obsidian, not here:
 
 Read `PRD.md`, `DATA.md`, `MODEL.md`, `STACK.md`, `ROADMAP.md` there before touching the corresponding area of the app. This file is the condensed, code-facing summary — when the two disagree, the Obsidian folder wins and this file needs updating in the same commit.
 
-**Status:** Phase 0 complete (free data path validated, ratings reconciled against Basketball-Reference, nightly GitHub Actions run proven green). Phase 1 in progress — the Python `ingest/` package. No web app code yet; the Next.js scaffold moved to Phase 3.
+**Status:** Phases 0 and 1 complete. Free data path validated; ratings derived and reconciled against Basketball-Reference (all 30 teams within ~0.2, spot-checked players exact on `gp` and within 1.0 on ratings); ingest pipeline built, tested (33 tests), and running nightly in GitHub Actions. **Next: Phase 2, the statistics layer** (`MODEL.md`) — estimate `k`, empirical-Bayes shrinkage, CIs, robust outlier flagging, and the backtest gate. No web app code yet; the Next.js scaffold moved to Phase 3.
+
+Run the pipeline: `python -m ingest --provider hoopr`. Tests: `python -m pytest tests/ -q`.
 
 ---
 
@@ -48,8 +50,12 @@ Full reasoning and the rejected alternatives: `STACK.md`.
 ## Pipeline (target shape — see ROADMAP.md for phase sequencing)
 
 ```
-fetch → validate → normalize → resolve transactions → aggregate → MODEL (shrink) → QA → publish
+fetch → normalize → validate → transactions → aggregate → [MODEL: Phase 2] → qa → publish
 ```
+
+Built in Phase 1 as `ingest/stages/*.py`, one module per stage, composed only by `ingest/orchestrator.py`. Each is `(PipelineState) -> PipelineState`, returning an updated copy rather than mutating (`ingest/state.py`). Run it with `python -m ingest --provider hoopr`.
+
+**Note the order:** `normalize` runs *before* `validate`, which is the reverse of what DATA.md originally specified — the doc was updated to match. The provider ships rows outside the population we compute on (null-keyed rows, All-Star squads, the NBA Cup final), so validating first would fail runs over rows we always intended to discard. Validating second guarantees the thing that matters: everything the arithmetic touches has been checked.
 
 - **fetch** — pull box scores from `hoopR-nba-data` (GitHub raw) or, on the fallback path, `nba_api` from a residential IP.
 - **validate** — Pydantic models at the boundary. External data lies.
