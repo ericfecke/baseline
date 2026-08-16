@@ -44,18 +44,24 @@ class ProviderError(RuntimeError):
 
 
 @dataclass(frozen=True)
-class BoxScores:
+class ProviderData:
     """Raw, unvalidated data straight from a provider.
+
+    Named for what it is rather than `BoxScores`, since it now carries
+    three different things the pipeline needs:
+
+    * `player_box` / `team_box` — the box scores everything is derived from.
+    * `schedule` — per-game type metadata the box scores lack. This is what
+      lets us exclude the NBA Cup Championship by its actual label rather
+      than guessing from the date (`stages/normalize.py`).
+    * `player_core` — player bio including draft year, which is the only
+      acquisition signal any free source gives us
+      (`stages/transactions.py`).
 
     `provider` names the implementation that produced these so it can be
     stamped into the snapshot's `meta` and the run log — when a number
-    looks wrong six months from now, the first question is which source
-    it came from.
-
-    `schedule` carries per-game type metadata, which the box scores alone
-    do not. It is what lets us exclude the NBA Cup Championship from
-    regular-season totals by its actual label rather than by guessing from
-    the date — see `stages/normalize.py`.
+    looks wrong six months from now, the first question is which source it
+    came from.
     """
 
     provider: str
@@ -63,6 +69,11 @@ class BoxScores:
     player_box: pd.DataFrame
     team_box: pd.DataFrame
     schedule: pd.DataFrame
+    player_core: pd.DataFrame
+
+
+# Kept so the old name doesn't break anything that imported it.
+BoxScores = ProviderData
 
 
 @runtime_checkable
@@ -72,7 +83,7 @@ class StatsProvider(Protocol):
 
     name: str
 
-    def get_box_scores(self, season: int) -> BoxScores: ...
+    def get_box_scores(self, season: int) -> ProviderData: ...
 
 
 class HoopRProvider:
@@ -97,7 +108,8 @@ class HoopRProvider:
     def _url(self, kind: str, season: int) -> str:
         # The schedule directory breaks the otherwise-uniform naming:
         # nba/schedules/parquet/nba_schedule_{season}.parquet, not
-        # nba/schedule/parquet/schedule_{season}.parquet.
+        # nba/schedule/parquet/schedule_{season}.parquet. Everything else
+        # (player_box, team_box, player_core) follows {kind}/{kind}_{season}.
         if kind == "schedule":
             return f"{HOOPR_RAW_BASE}/schedules/parquet/nba_schedule_{season}.parquet"
         return f"{HOOPR_RAW_BASE}/{kind}/parquet/{kind}_{season}.parquet"
@@ -135,13 +147,14 @@ class HoopRProvider:
                 "Delete it and retry to force a fresh download."
             ) from exc
 
-    def get_box_scores(self, season: int) -> BoxScores:
-        return BoxScores(
+    def get_box_scores(self, season: int) -> ProviderData:
+        return ProviderData(
             provider=self.name,
             season=season,
             player_box=self._fetch_parquet("player_box", season),
             team_box=self._fetch_parquet("team_box", season),
             schedule=self._fetch_parquet("schedule", season),
+            player_core=self._fetch_parquet("player_core", season),
         )
 
 
@@ -158,10 +171,10 @@ class FixtureProvider:
     def __init__(self, fixture_dir: Path | str = "fixtures") -> None:
         self.fixture_dir = Path(fixture_dir)
 
-    def get_box_scores(self, season: int) -> BoxScores:
+    def get_box_scores(self, season: int) -> ProviderData:
         paths = {
             kind: self.fixture_dir / f"{kind}_{season}.parquet"
-            for kind in ("player_box", "team_box", "schedule")
+            for kind in ("player_box", "team_box", "schedule", "player_core")
         }
         missing = [str(p) for p in paths.values() if not p.exists()]
         if missing:
@@ -170,12 +183,13 @@ class FixtureProvider:
                 + ", ".join(missing)
                 + ". Run the hoopR provider once to populate them."
             )
-        return BoxScores(
+        return ProviderData(
             provider=self.name,
             season=season,
             player_box=pd.read_parquet(paths["player_box"]),
             team_box=pd.read_parquet(paths["team_box"]),
             schedule=pd.read_parquet(paths["schedule"]),
+            player_core=pd.read_parquet(paths["player_core"]),
         )
 
 

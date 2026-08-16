@@ -13,4 +13,5 @@ def run(state: PipelineState) -> PipelineState:
         raw_player_box=box.player_box,
         raw_team_box=box.team_box,
         raw_schedule=box.schedule,
+        raw_player_core=box.player_core,
     )

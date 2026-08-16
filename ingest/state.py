@@ -51,6 +51,7 @@ class PipelineState:
     raw_player_box: Optional[pd.DataFrame] = None
     raw_team_box: Optional[pd.DataFrame] = None
     raw_schedule: Optional[pd.DataFrame] = None
+    raw_player_core: Optional[pd.DataFrame] = None
 
     # Normalized: real teams only, one season type, int IDs, repaired
     # turnovers, `played` computed.

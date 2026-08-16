@@ -44,9 +44,27 @@
         "stage": "transactions"
       },
       {
+        "count": 527,
+        "detail": "",
+        "kind": "acquisition_season_start",
+        "stage": "transactions"
+      },
+      {
         "count": 79,
-        "detail": "mid-season stint boundaries inferred from the game log; labelling trade vs signing vs call-up needs hoopR's nba/rosters data (DATA.md §6a)",
-        "kind": "acquisition_type_unknown",
+        "detail": "",
+        "kind": "acquisition_team_change",
+        "stage": "transactions"
+      },
+      {
+        "count": 55,
+        "detail": "",
+        "kind": "acquisition_rookie_debut",
+        "stage": "transactions"
+      },
+      {
+        "count": 79,
+        "detail": "mid-season moves are labelled team_change only; trade vs waiver vs buyout is not derivable — hoopR ships no transactions feed (DATA.md §6a)",
+        "kind": "acquisition_mechanism_unavailable",
         "stage": "transactions"
       },
       {
@@ -10686,7 +10704,7 @@
       "team_provider_id": 9
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 6,
@@ -10719,7 +10737,7 @@
       "team_provider_id": 24
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 41,
@@ -10928,7 +10946,7 @@
       "team_provider_id": 15
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 7,
@@ -11016,7 +11034,7 @@
       "team_provider_id": 25
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 19,
@@ -11038,7 +11056,7 @@
       "team_provider_id": 26
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-20",
       "gp": 4,
@@ -11115,7 +11133,7 @@
       "team_provider_id": 23
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 30,
@@ -11313,7 +11331,7 @@
       "team_provider_id": 1
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 15,
@@ -11390,7 +11408,7 @@
       "team_provider_id": 15
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 30,
@@ -11456,7 +11474,7 @@
       "team_provider_id": 24
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 26,
@@ -11500,7 +11518,7 @@
       "team_provider_id": 19
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-27",
       "gp": 8,
@@ -11511,7 +11529,7 @@
       "team_provider_id": 6
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 11,
@@ -11566,7 +11584,7 @@
       "team_provider_id": 10
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 24,
@@ -11621,7 +11639,7 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-01",
       "gp": 23,
@@ -11929,7 +11947,7 @@
       "team_provider_id": 1
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 32,
@@ -12171,7 +12189,7 @@
       "team_provider_id": 12
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 26,
@@ -12193,7 +12211,7 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-18",
       "gp": 5,
@@ -12226,7 +12244,7 @@
       "team_provider_id": 18
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-09",
       "gp": 26,
@@ -12292,7 +12310,7 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 3,
@@ -12325,7 +12343,7 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-06",
       "gp": 2,
@@ -12512,7 +12530,7 @@
       "team_provider_id": 4
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 25,
@@ -12545,7 +12563,7 @@
       "team_provider_id": 15
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 16,
@@ -12710,7 +12728,7 @@
       "team_provider_id": 30
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 26,
@@ -12765,7 +12783,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 22,
@@ -12776,7 +12794,7 @@
       "team_provider_id": 6
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 28,
@@ -12809,7 +12827,7 @@
       "team_provider_id": 1
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-16",
       "gp": 5,
@@ -12820,7 +12838,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-05",
       "gp": 2,
@@ -12886,7 +12904,7 @@
       "team_provider_id": 21
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-11",
       "gp": 3,
@@ -12919,7 +12937,7 @@
       "team_provider_id": 2
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 16,
@@ -13007,7 +13025,7 @@
       "team_provider_id": 21
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-25",
       "gp": 20,
@@ -13205,7 +13223,7 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 39,
@@ -13271,7 +13289,7 @@
       "team_provider_id": 2
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-21",
       "gp": 6,
@@ -13370,7 +13388,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 21,
@@ -13469,7 +13487,7 @@
       "team_provider_id": 12
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 19,
@@ -13524,7 +13542,7 @@
       "team_provider_id": 16
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 24,
@@ -13557,7 +13575,7 @@
       "team_provider_id": 20
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-05",
       "gp": 20,
@@ -13612,7 +13630,7 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 8,
@@ -13678,7 +13696,7 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 9,
@@ -13722,7 +13740,7 @@
       "team_provider_id": 19
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-23",
       "gp": 6,
@@ -13876,7 +13894,7 @@
       "team_provider_id": 12
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 4,
@@ -13887,7 +13905,7 @@
       "team_provider_id": 2
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-03",
       "gp": 5,
@@ -13898,7 +13916,7 @@
       "team_provider_id": 2
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-11",
       "gp": 1,
@@ -13920,7 +13938,7 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 5,
@@ -14019,7 +14037,7 @@
       "team_provider_id": 1
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 17,
@@ -14107,7 +14125,7 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 27,
@@ -14151,7 +14169,7 @@
       "team_provider_id": 14
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 14,
@@ -14173,7 +14191,7 @@
       "team_provider_id": 13
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-01-11",
       "gp": 11,
@@ -14239,7 +14257,7 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 3,
@@ -14261,7 +14279,7 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2025-12-18",
       "gp": 1,
@@ -14349,7 +14367,7 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-27",
       "gp": 17,
@@ -14382,7 +14400,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-21",
       "gp": 18,
@@ -14437,8 +14455,8 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 61,
       "player_provider_id": 4432185,
@@ -14635,7 +14653,7 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-01-24",
       "gp": 5,
@@ -14866,7 +14884,7 @@
       "team_provider_id": 9
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 14,
@@ -14921,7 +14939,7 @@
       "team_provider_id": 10
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-11",
       "gp": 4,
@@ -14965,7 +14983,7 @@
       "team_provider_id": 12
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-09",
       "gp": 1,
@@ -14976,7 +14994,7 @@
       "team_provider_id": 20
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-03-24",
       "gp": 6,
@@ -14987,7 +15005,7 @@
       "team_provider_id": 23
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 16,
@@ -15075,8 +15093,8 @@
       "team_provider_id": 8
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-02-11",
       "gp": 11,
       "player_provider_id": 4433569,
@@ -15196,8 +15214,8 @@
       "team_provider_id": 19
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 69,
       "player_provider_id": 4576060,
@@ -15251,7 +15269,7 @@
       "team_provider_id": 1
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 19,
@@ -15262,7 +15280,7 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 1,
@@ -15295,8 +15313,8 @@
       "team_provider_id": 28
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 12,
       "player_provider_id": 4591259,
@@ -15537,8 +15555,8 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 6,
       "player_provider_id": 4593043,
@@ -15702,8 +15720,8 @@
       "team_provider_id": 14
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 82,
       "player_provider_id": 4602025,
@@ -15713,8 +15731,8 @@
       "team_provider_id": 30
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 50,
       "player_provider_id": 4606840,
@@ -15724,7 +15742,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 16,
@@ -15779,7 +15797,7 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 26,
@@ -15944,7 +15962,7 @@
       "team_provider_id": 20
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 30,
@@ -15966,7 +15984,7 @@
       "team_provider_id": 30
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 6,
@@ -15977,8 +15995,8 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 31,
       "player_provider_id": 4683934,
@@ -15999,8 +16017,8 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 40,
       "player_provider_id": 4684208,
@@ -16032,7 +16050,7 @@
       "team_provider_id": 16
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 30,
@@ -16087,7 +16105,7 @@
       "team_provider_id": 26
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-08",
       "gp": 26,
@@ -16098,7 +16116,7 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-05",
       "gp": 16,
@@ -16131,8 +16149,8 @@
       "team_provider_id": 6
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 37,
       "player_provider_id": 4697268,
@@ -16164,8 +16182,8 @@
       "team_provider_id": 14
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 34,
       "player_provider_id": 4700852,
@@ -16208,7 +16226,7 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-02-22",
       "gp": 12,
@@ -16263,8 +16281,8 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 11,
       "player_provider_id": 4701992,
@@ -16307,7 +16325,7 @@
       "team_provider_id": 23
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 29,
@@ -16318,8 +16336,8 @@
       "team_provider_id": 5
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 68,
       "player_provider_id": 4702352,
@@ -16340,8 +16358,8 @@
       "team_provider_id": 19
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 75,
       "player_provider_id": 4702384,
@@ -16373,8 +16391,8 @@
       "team_provider_id": 21
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-10",
       "gp": 23,
       "player_provider_id": 4702656,
@@ -16395,8 +16413,8 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 22,
       "player_provider_id": 4702745,
@@ -16428,8 +16446,8 @@
       "team_provider_id": 13
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 38,
       "player_provider_id": 4703421,
@@ -16461,7 +16479,7 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 2,
@@ -16582,8 +16600,8 @@
       "team_provider_id": 24
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 41,
       "player_provider_id": 4781746,
@@ -16626,7 +16644,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 23,
@@ -16659,8 +16677,8 @@
       "team_provider_id": 1
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 81,
       "player_provider_id": 4869780,
@@ -16714,8 +16732,8 @@
       "team_provider_id": 4
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 72,
       "player_provider_id": 4873138,
@@ -16725,8 +16743,8 @@
       "team_provider_id": 26
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 44,
       "player_provider_id": 4873201,
@@ -16769,8 +16787,8 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-02-01",
       "gp": 45,
       "player_provider_id": 4896372,
@@ -16780,7 +16798,7 @@
       "team_provider_id": 26
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-08",
       "gp": 24,
@@ -16791,8 +16809,8 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 69,
       "player_provider_id": 4897262,
@@ -16857,8 +16875,8 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 74,
       "player_provider_id": 4898371,
@@ -16879,8 +16897,8 @@
       "team_provider_id": 25
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-08",
       "gp": 62,
       "player_provider_id": 4903027,
@@ -16912,7 +16930,7 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 30,
@@ -16989,8 +17007,8 @@
       "team_provider_id": 5
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 50,
       "player_provider_id": 5023693,
@@ -17000,8 +17018,8 @@
       "team_provider_id": 5
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 69,
       "player_provider_id": 5037871,
@@ -17011,8 +17029,8 @@
       "team_provider_id": 24
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 63,
       "player_provider_id": 5037873,
@@ -17022,8 +17040,8 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 70,
       "player_provider_id": 5041939,
@@ -17044,7 +17062,7 @@
       "team_provider_id": 16
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 27,
@@ -17055,8 +17073,8 @@
       "team_provider_id": 4
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 25,
       "player_provider_id": 5060631,
@@ -17066,8 +17084,8 @@
       "team_provider_id": 13
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 71,
       "player_provider_id": 5061568,
@@ -17077,8 +17095,8 @@
       "team_provider_id": 24
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 81,
       "player_provider_id": 5061575,
@@ -17110,8 +17128,8 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 57,
       "player_provider_id": 5093267,
@@ -17132,7 +17150,7 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 16,
@@ -17176,7 +17194,7 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 13,
@@ -17264,8 +17282,8 @@
       "team_provider_id": 26
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 55,
       "player_provider_id": 5105977,
@@ -17308,8 +17326,8 @@
       "team_provider_id": 5
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 15,
       "player_provider_id": 5107156,
@@ -17319,8 +17337,8 @@
       "team_provider_id": 4
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-03-22",
       "gp": 57,
       "player_provider_id": 5107173,
@@ -17352,7 +17370,7 @@
       "team_provider_id": 23
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 4,
@@ -17374,8 +17392,8 @@
       "team_provider_id": 28
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-03-04",
       "gp": 41,
       "player_provider_id": 5108024,
@@ -17396,8 +17414,8 @@
       "team_provider_id": 29
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 75,
       "player_provider_id": 5124612,
@@ -17407,8 +17425,8 @@
       "team_provider_id": 20
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 82,
       "player_provider_id": 5144091,
@@ -17418,8 +17436,8 @@
       "team_provider_id": 3
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 74,
       "player_provider_id": 5144126,
@@ -17440,8 +17458,8 @@
       "team_provider_id": 11
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 5,
       "player_provider_id": 5157587,
@@ -17517,7 +17535,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 23,
@@ -17550,8 +17568,8 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-02-27",
       "gp": 52,
       "player_provider_id": 5175643,
@@ -17561,8 +17579,8 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-10",
       "gp": 74,
       "player_provider_id": 5175647,
@@ -17594,7 +17612,7 @@
       "team_provider_id": 24
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 6,
@@ -17605,8 +17623,8 @@
       "team_provider_id": 5
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 46,
       "player_provider_id": 5203685,
@@ -17649,8 +17667,8 @@
       "team_provider_id": 18
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-10",
       "gp": 59,
       "player_provider_id": 5214637,
@@ -17660,8 +17678,8 @@
       "team_provider_id": 19
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 53,
       "player_provider_id": 5214640,
@@ -17671,8 +17689,8 @@
       "team_provider_id": 14
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 43,
       "player_provider_id": 5217746,
@@ -17682,8 +17700,8 @@
       "team_provider_id": 22
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-04",
       "gp": 60,
       "player_provider_id": 5238230,
@@ -17693,8 +17711,8 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-10",
       "gp": 54,
       "player_provider_id": 5239561,
@@ -17704,8 +17722,8 @@
       "team_provider_id": 19
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 31,
       "player_provider_id": 5239590,
@@ -17715,8 +17733,8 @@
       "team_provider_id": 30
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2025-11-24",
       "gp": 2,
       "player_provider_id": 5242496,
@@ -17726,8 +17744,8 @@
       "team_provider_id": 4
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 44,
       "player_provider_id": 5242502,
@@ -17737,8 +17755,8 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-10",
       "gp": 56,
       "player_provider_id": 5279130,
@@ -17748,8 +17766,8 @@
       "team_provider_id": 17
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 40,
       "player_provider_id": 5279133,
@@ -17759,8 +17777,8 @@
       "team_provider_id": 16
     },
     {
-      "acquisition_type": "season_start",
-      "boundary_source": "season_start",
+      "acquisition_type": "rookie_debut",
+      "boundary_source": "draft_data",
       "end_date": "2026-04-12",
       "gp": 69,
       "player_provider_id": 5289900,
@@ -17836,7 +17854,7 @@
       "team_provider_id": 7
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-10",
       "gp": 16,
@@ -17924,7 +17942,7 @@
       "team_provider_id": 27
     },
     {
-      "acquisition_type": "unknown",
+      "acquisition_type": "team_change",
       "boundary_source": "game_log_inference",
       "end_date": "2026-04-12",
       "gp": 29,

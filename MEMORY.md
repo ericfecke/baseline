@@ -57,6 +57,30 @@ Two things learned digging into this:
 
 **Validator design rule that came out of this:** quirks we've characterised get filtered/repaired *and counted*; anything uncharacterised fails the run loudly. The turnover *identity* (`total == turnovers + team_turnovers`) is enforced strictly, because if that ever breaks the provider changed a column's meaning and the possessions formula needs re-deriving.
 
+### hoopR has no transactions feed — what `acquisition_type` can and can't say (2026-08-16)
+
+Investigated all four candidate hoopR datasets to label *why* a player changed teams. Conclusion: **the mechanism of a move is not derivable from any free source currently in play.**
+
+| Dataset | Rows (2025-26) | Verdict |
+|---|---|---|
+| `nba/rosters` | 537 | **Useless for this.** A *current snapshot*: one row per athlete, `status_name` = "Active" for all 537, no dates, no history, nobody on two teams. |
+| `nba/game_rosters` | 34,883 | **Useless for this.** The promising-looking `reason` column is injury/DNP text — "COACH'S DECISION" (33,650), "ILLNESS", "SUSPENDED BY LEAGUE". Not movement. |
+| `nba/player_core` | 591 | **Useful.** Carries `draft_year` / `draft_round` / `draft_selection` for 434 players, plus bio fields (height, weight, age, college) worth having for the Phase 5 detail panel. |
+| `nba/draft` | — | Redundant; `player_core` already carries the draft fields we need. |
+
+**What we emit, and why only this:**
+
+- `rookie_debut` (55) — from `player_core.draft_year == season − 1`. The draft precedes the season, so 2025-26 (`season = 2026`) has the 2025 class. **Verified against the known class:** Flagg #1, Harper #2, Edgecombe #3, Knueppel #4, Bailey #5 all correct. **Do not use `experience_years`** — it reports **1** for first-year players (Flagg: `experience_years = 1.0`) while 22 others show 0, so it doesn't identify rookies at all.
+- `season_start` (527) — first stint, not a current-class rookie.
+- `team_change` (79) — moved between NBA teams mid-season. We know *that*, never *how*.
+
+**Two labels deliberately rejected:**
+
+1. **`trade` / `signing` / `waiver` / `g_league_callup`** — would require inventing a mechanism. A fan reading "Traded to Phoenix" would believe it.
+2. **`mid_season_debut`** (signed later vs. on the opening roster) — separating these needs a cutoff on how late a first appearance came, and the distribution has **no natural break**: 332 players debut on their team's opening night, then a smooth decay out to 173 days. Any threshold would be invented. `start_date` is published on every stint, so the UI can state "first appeared 12 February" as fact instead.
+
+**Cross-validation that the stint splitting is right:** CJ McCollum comes out as two stints of 35 and 41 games; Basketball-Reference lists him as 2TM with exactly 35 (WAS) and 41 (ATL). There's a test pinning this, which also confirms stint possessions are the post-move sample — the correct `n` for Phase 2 shrinkage.
+
 ### The NBA Cup Championship must be excluded (found 2026-08-07)
 
 ESPN/hoopR tags the **NBA Cup (In-Season Tournament) Championship game** as `season_type == 2`, but it does **not** count toward regular-season statistics — officially, or in Basketball-Reference. Left in, the two finalists show **83** games instead of 82, and `gp` and `pace` are wrong by a game for every player on both rosters.
@@ -144,8 +168,8 @@ _Append here as they're found. Seed list from DATA.md §6 — confirm or refute 
 - **In-season tournament (NBA Cup) final adds an extra game for its two participants.** Observed 2025-26: San Antonio Spurs and New York Knicks show `gp=83` where every other team shows `82`. The Cup championship game counts as a real regular-season game for those two teams only. Not a bug — just don't assume every team has an identical game count when validating row counts.
 - **`turnovers` vs. `team_turnovers` vs. `total_turnovers` (team_box).** `turnovers` = turnovers individually attributable to a player (sums to the player-level figure); `team_turnovers` = turnovers charged to the team itself (shot-clock/backcourt violations etc., not attributable to one player); `total_turnovers` = the sum of both. **The possessions formula (`FGA + 0.44·FTA − OREB + TOV`) needs `total_turnovers`** — a team turnover still ends a possession. Using bare `turnovers` would systematically undercount possessions. Confirmed by computing league-wide ORtg vs. DRtg with `total_turnovers` — they matched to 2 decimal places (112.75 = 112.75) as they must by construction; this only held with the full total.
 - **Player-level `turnovers` (not `total_turnovers`) is the correct input to Oliver's individual formulas** — team-charged turnovers aren't attributable to a specific player's box line, so summing individual `turnovers` per player is right; don't apply the team-level `total_turnovers` fix to the player-level table.
-- Traded players — stint boundaries resolved via `player_team_stints`; note here which boundary-detection method (`roster_data` vs. `game_log_inference`) ends up doing most of the work in practice. Not yet built — the Phase 0 validation script groups by `(athlete_id, team_id)`, which naturally separates a traded player's stints, but doesn't yet resolve `acquisition_type`.
-- Two-way / G-League players — how they actually show up in the provider data. Not yet investigated.
+- **Traded players / `acquisition_type` — resolved as far as the data allows (2026-08-16).** See the dedicated section below.
+- Two-way / G-League players — **not identifiable.** `rosters.status_name` is "Active" for all 537 players, so there is no two-way or G-League flag anywhere in hoopR. They simply appear as ordinary small-sample players, which the Phase 2 shrinkage handles correctly anyway.
 - Defensive rating team-context distortion — magnitude observed once shrinkage (Phase 2) is built.
 - Possessions vs. minutes-only providers — not applicable; hoopR gives full box scores, so the `minutes × team_pace / 48` fallback estimate was never needed for this provider.
 - Offseason behavior — confirmed: no new commits to `player_box_2026.parquet` since 2026-07-14 (last Summer League game), during the current offseason check on 2026-08-02. Matches DATA.md's expected behavior.

@@ -60,6 +60,8 @@ def normalized_state() -> PipelineState:
         # stage silently degrades to keeping the game, so omitting it here
         # would make these tests disagree with the real pipeline.
         raw_schedule=box.schedule,
+        # Required for rookie identification in the transactions stage.
+        raw_player_core=box.player_core,
     )
     return normalize.run(state)
 
@@ -420,9 +422,63 @@ def test_multi_stint_players_are_split(rated_state: PipelineState) -> None:
     moved = counts[counts > 1].index[0]
     player_stints = stints[stints["athlete_id"] == moved].sort_values("stint_sequence")
     assert player_stints["team_id"].nunique() >= 2
-    # First stint of a season is not an acquisition event we can label.
-    assert player_stints.iloc[0]["acquisition_type"] == "season_start"
-    assert player_stints.iloc[1]["acquisition_type"] == "unknown"
+    assert player_stints.iloc[0]["acquisition_type"] in {
+        "season_start",
+        "rookie_debut",
+    }
+    assert player_stints.iloc[1]["acquisition_type"] == "team_change"
+
+
+def test_rookies_are_identified_from_draft_data(rated_state: PipelineState) -> None:
+    """`draft_year == season - 1` identifies the current rookie class.
+
+    The draft happens the June before the season, so 2025-26 (season 2026)
+    has the 2025 class. Uses draft_year rather than `experience_years`,
+    which reports 1 for first-year players and is therefore useless here.
+    """
+    stints = rated_state.stints
+    rookies = stints[stints["acquisition_type"] == "rookie_debut"]
+    assert not rookies.empty
+    # Every rookie label must come from draft data, never inference.
+    assert set(rookies["boundary_source"]) == {"draft_data"}
+
+
+def test_mid_season_movers_are_labelled_team_change_only(
+    rated_state: PipelineState,
+) -> None:
+    """We may claim a player moved; we may not claim *how*.
+
+    hoopR ships no transactions feed, so trade vs waiver vs buyout is not
+    derivable. This test exists to stop someone later "improving" the
+    labels by guessing — a fan reading "Traded to Phoenix" would believe
+    it, and we'd have no basis for saying it.
+    """
+    stints = rated_state.stints
+    mid_season = stints[stints["stint_sequence"] > 1]
+    assert not mid_season.empty
+    assert set(mid_season["acquisition_type"]) == {"team_change"}
+
+    unsupportable = {"trade", "signing", "waiver", "buyout", "g_league_callup"}
+    assert not (set(stints["acquisition_type"]) & unsupportable), (
+        "an acquisition mechanism was claimed that no available data "
+        "supports; see stages/transactions.py"
+    )
+
+
+def test_traded_player_stint_matches_basketball_reference(
+    rated_state: PipelineState,
+) -> None:
+    """CJ McCollum is listed by BRef as 2TM: 35 games WAS, 41 games ATL.
+
+    His post-move stint must come out at 41 games — which also confirms the
+    stint's possessions are the post-move sample, the thing Phase 2 needs
+    as `n` for shrinkage rather than a full-season figure that would
+    overstate confidence.
+    """
+    players = rated_state.player_ratings
+    mccollum = players[players["name"] == "CJ McCollum"].sort_values("gp")
+    assert len(mccollum) == 2, "expected two stints for a mid-season mover"
+    assert sorted(int(g) for g in mccollum["gp"]) == [35, 41]
 
 
 def test_qa_rejection_prevents_publish(rated_state: PipelineState, tmp_path: Path) -> None:

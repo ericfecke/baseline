@@ -344,18 +344,29 @@ class Stint(_StrictRow):
     season: int
     start_date: date
     end_date: date
+    # Only values the pipeline can actually justify from available data.
+    #
+    #   season_start -- first stint of the season, established player
+    #   rookie_debut -- first stint, drafted for this season
+    #   team_change  -- moved from another NBA team mid-season
+    #   unknown      -- fallback
+    #
+    # Notably absent: trade, signing, waiver, buyout, g_league_callup.
+    # Those describe the *mechanism* of a move, and no free source in play
+    # carries it — hoopR ships no transactions feed (its `rosters` file is a
+    # current snapshot with no dates or history, and `game_rosters.reason`
+    # holds injury text). `team_change` is the honest limit of what a game
+    # log supports. A fan reading "Traded to Phoenix" would believe it, so
+    # we don't say it unless we know it. See DATA.md §6a.
     acquisition_type: Literal[
         "season_start",
-        "draft",
-        "trade",
-        "signing",
-        "waiver",
-        "two_way",
-        "g_league_callup",
-        "two_way_conversion",
+        "rookie_debut",
+        "team_change",
         "unknown",
     ]
-    boundary_source: Literal["roster_data", "game_log_inference", "season_start"]
+    boundary_source: Literal[
+        "season_start", "game_log_inference", "draft_data", "roster_data"
+    ]
     gp: int = Field(ge=0)
     poss: float = Field(ge=0)
 
